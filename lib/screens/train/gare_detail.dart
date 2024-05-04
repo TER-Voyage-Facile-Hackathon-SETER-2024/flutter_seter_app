@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:terappmobile/models/response/trains_station_response.dart';
-import 'package:terappmobile/provider/auth_provider.dart';
 import 'package:terappmobile/provider/train_provider.dart';
 import 'package:terappmobile/screens/auth/info_perso.dart';
 import 'package:terappmobile/screens/home/home.dart';
@@ -32,7 +29,7 @@ class _GareDetailState extends State<GareDetail> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-      var size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
     final double itemHeight = size.height / 2.8;
     final double itemWidth = size.width / 2;
     return Scaffold(
@@ -84,12 +81,26 @@ class _GareDetailState extends State<GareDetail> {
                     ),
                   ),
                   Center(
-                    child: Column(children: [
-                      TitleOption(data: 'Informations de la gare', color: Colors.white, size: 23, weight: FontWeight.w700, maxLines: 1, overflow: TextOverflow.clip,),
-                      TitleOption(data: 'Trajets occasionnels', color: Colors.white, size: 15, weight: FontWeight.w300, maxLines: 1, overflow: TextOverflow.clip,)
-
-                    ],)
-                  ),
+                      child: Column(
+                    children: [
+                      TitleOption(
+                        data: 'Informations de la gare',
+                        color: Colors.white,
+                        size: 23,
+                        weight: FontWeight.w700,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      ),
+                      TitleOption(
+                        data: 'Trajets occasionnels',
+                        color: Colors.white,
+                        size: 15,
+                        weight: FontWeight.w300,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      )
+                    ],
+                  )),
                   SizedBox(width: 45),
                 ],
               ),
@@ -116,7 +127,8 @@ class _GareDetailState extends State<GareDetail> {
                         children: [
                           CircleAvatar(
                             minRadius: 45,
-                            child: Image.asset('images/detailgare.png',height :60),
+                            child: Image.asset('images/detailgare.png',
+                                height: 60),
                           ),
                           TitleOption(data: removeGareDe(Provider.of<GareProvider>(context)
                            .selectedStation!.nom
@@ -390,7 +402,7 @@ class _GareDetailState extends State<GareDetail> {
                         SizedBox(
                           width: 20,
                         ),
-                         Flexible(
+                        Flexible(
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 15, horizontal: 5),
@@ -441,8 +453,7 @@ class _GareDetailState extends State<GareDetail> {
                                 ])),
                           
                         ),
-                        SizedBox(width: 20,),
-                         Flexible(
+                        Flexible(
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 15, horizontal: 5),
@@ -496,10 +507,12 @@ class _GareDetailState extends State<GareDetail> {
                                 ])),
                           
                         ),
-                       ],
+                      ],
                     ),
-                    SizedBox(height: 40,) ,
-                  Consumer<GareProvider>(
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Consumer<GareProvider>(
                       builder: (context, provider, child) {
                         return Column(
                           children: provider.selectedStation!.commerces
@@ -520,6 +533,7 @@ class _GareDetailState extends State<GareDetail> {
     );
   }
 }
+
 class CommerceListItem extends StatefulWidget {
   final Commerces commerce;
 
@@ -537,42 +551,41 @@ class _CommerceListItemState extends State<CommerceListItem> {
     return Column(
       children: [
         Container(
-           decoration: BoxDecoration(
-            border: Border.all(color: Color.fromRGBO(152, 162, 179, 1)),
-            borderRadius: BorderRadius.circular(10),
-            color: isExpanded ? Color.fromRGBO(242, 244, 247, 1) : Colors.white
-          ),
-          child: 
-            ListTile(
-              selectedColor: Color.fromRGBO(242, 244, 247, 1),
-              title: Text(widget.commerce.nom),
-              subtitle: isExpanded
-                  ? Text('Description: ${widget.commerce.description}')
-                  : null,
-              trailing: GestureDetector(
-                onTap : () {
+          decoration: BoxDecoration(
+              border: Border.all(color: Color.fromRGBO(152, 162, 179, 1)),
+              borderRadius: BorderRadius.circular(10),
+              color:
+                  isExpanded ? Color.fromRGBO(242, 244, 247, 1) : Colors.white),
+          child: ListTile(
+            selectedColor: Color.fromRGBO(242, 244, 247, 1),
+            title: Text(widget.commerce.nom),
+            subtitle: isExpanded
+                ? Text('Description: ${widget.commerce.description}')
+                : null,
+            trailing: GestureDetector(
+              onTap: () {
                 setState(() {
                   isExpanded = !isExpanded;
                 });
               },
-                
-                child:  Flexible(
-                  child: CircleAvatar(
-                    backgroundColor:isExpanded ? Colors.white :  Color.fromRGBO(242, 244, 247, 1) ,
-                    child: Icon(isExpanded ? Icons.arrow_drop_down : Icons.expand_more)),
-                ),
-                  /* onPressed: () {
+              child: Flexible(
+                child: CircleAvatar(
+                    backgroundColor: isExpanded
+                        ? Colors.white
+                        : Color.fromRGBO(242, 244, 247, 1),
+                    child: Icon(isExpanded ? Icons.more : Icons.expand_more)),
+              ),
+              /* onPressed: () {
                     setState(() {
                       isExpanded = !isExpanded;
                     });
                   }, */
-                ),
-              ),
             ),
-        
-        
-        SizedBox(height: 8,),
-
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
       ],
     );
   }
