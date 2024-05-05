@@ -7,6 +7,7 @@ import 'package:terappmobile/provider/train_provider.dart';
 import 'package:terappmobile/provider/update_user_infos_provider.dart';
 import 'package:terappmobile/screens/auth/splash.dart';
 import 'package:terappmobile/utils/app_colors.dart';
+import 'package:terappmobile/screens/home/carte_abonnement.dart';
 
 void main() {
   runApp(const MyApp());
