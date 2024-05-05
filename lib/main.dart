@@ -5,7 +5,8 @@ import 'package:terappmobile/provider/get_user_provider.dart';
 import 'package:terappmobile/provider/seter_provider.dart';
 import 'package:terappmobile/provider/train_provider.dart';
 import 'package:terappmobile/provider/update_user_infos_provider.dart';
-import 'package:terappmobile/screens/home/ticket.dart';
+import 'package:terappmobile/screens/auth/splash.dart';
+import 'package:terappmobile/utils/app_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,9 +27,11 @@ class MyApp extends StatelessWidget {
               create: (_) => UpdateUserInfosProvider()),
         ],
         child: MaterialApp(
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: AppColors.beige)),
           debugShowCheckedModeBanner: false,
           // ...
-          home: Ticket(),
+          home: const SplashScreen(),
         ));
   }
 }

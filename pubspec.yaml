@@ -154,6 +154,11 @@ flutter:
     - images/arrowgare.png
     - audios/audio.mp3
     - images/scan.png
+    - images/trainblanc.png
+    - images/logoOM.png
+    - images/logoMI.png
+    - images/qr.png
+    - images/imgpasdevoyage.png
    # - .png
 
 

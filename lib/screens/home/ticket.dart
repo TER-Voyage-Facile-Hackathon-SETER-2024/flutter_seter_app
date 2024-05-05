@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:terappmobile/models/choice_train.dart';
+import 'package:terappmobile/provider/get_user_provider.dart';
 import 'package:terappmobile/screens/home/accueil.dart';
 import 'package:terappmobile/utils/app_colors.dart';
 import 'package:terappmobile/utils/title_option.dart';
@@ -34,6 +35,7 @@ class _TicketState extends State<Ticket> {
 
   @override
   Widget build(BuildContext context) {
+    
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     const kTileHeight = 50.0;

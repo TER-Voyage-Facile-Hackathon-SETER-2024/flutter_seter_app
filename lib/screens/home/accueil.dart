@@ -10,7 +10,6 @@ import 'package:terappmobile/provider/auth_provider.dart';
 import 'package:terappmobile/provider/seter_provider.dart';
 import 'package:terappmobile/provider/train_provider.dart';
 import 'package:terappmobile/screens/ajout_voyage/ajout_voyage.dart';
-import 'package:terappmobile/screens/train/suivi_voyage.dart';
 import 'package:terappmobile/screens/train/train_voyage.dart';
 import 'package:terappmobile/utils/app_colors.dart';
 import 'package:terappmobile/utils/title_option.dart';
@@ -123,7 +122,7 @@ class _AccueilState extends State<Accueil> {
                     future: gares(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       } else if (snapshot.hasError) {
@@ -159,10 +158,12 @@ class _AccueilState extends State<Accueil> {
                     },
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 GestureDetector(
                   onTap: () {
-                    var userid = Provider.of<AuthProvider>(context , listen: false).userId!;
+                    var userid =
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .userId!;
                     TrainStationsResponse trainStationsResponse =
                         TrainStationsResponse(
                             id: userid,
@@ -331,10 +332,10 @@ class _AccueilState extends State<Accueil> {
   @override
   void initState() {
     super.initState();
-    /* fullname = Provider.of<AuthProvider>(context, listen: false)
-        .authRegisterResponse!
-        .data!
-        .fullname!; */
+    //  fullname = Provider.of<AuthProvider>(context, listen: false)
+    //     .authRegisterResponse!
+    //     .data!
+    //     .fullname!;
 
     //getUserFromSP();
     gareFuture = gares();
@@ -347,58 +348,6 @@ class _AccueilState extends State<Accueil> {
     File audioFile1 = File('audios/audio.mp3');
     File audioFile3 = File('audios/audio.mp3');
 
-    /* List<VoyageInfoResponse> voyageInfoList = [
-      VoyageInfoResponse(
-        idUser: 1,
-        codeProduit: 1,
-        nomCommercial: "1 Voyage QRcode (THIA/YEUM)",
-        limitesDeValidit: "",
-        nombreDePRiodes: "",
-        typeDePRiode: "",
-        tempsDAntiPassbackSec: 180,
-        tempsDeMultiValidationSec: 0,
-        validitCourseSimpleMin: 120,
-        voyagesTotaux: 1,
-        dateDeBasculement: "",
-        supports: '"Ticket Papier"',
-        profils: "",
-        prix: 500.0,
-      ),
-      VoyageInfoResponse(
-        idUser: 2,
-        codeProduit: 2,
-        nomCommercial: "1 Voyage QRcode (BAR/DIA)",
-        limitesDeValidit: "",
-        nombreDePRiodes: "",
-        typeDePRiode: "",
-        tempsDAntiPassbackSec: 180,
-        tempsDeMultiValidationSec: 0,
-        validitCourseSimpleMin: 120,
-        voyagesTotaux: 1,
-        dateDeBasculement: "",
-        supports: "Ticket Papier",
-        profils: "",
-        prix: 500.0,
-      ),
-      VoyageInfoResponse(
-        idUser: 2,
-        codeProduit: 2,
-        nomCommercial: "1 Voyage QRcode (BAR/DIA)",
-        limitesDeValidit: "",
-        nombreDePRiodes: "",
-        typeDePRiode: "",
-        tempsDAntiPassbackSec: 180,
-        tempsDeMultiValidationSec: 0,
-        validitCourseSimpleMin: 120,
-        voyagesTotaux: 1,
-        dateDeBasculement: "",
-        supports: "Ticket Papier",
-        profils: "",
-        prix: 500.0,
-      ),
-      // Add more objects as needed...
-    ];
- */
     cardInfoList = [
       CardInfo(
         imageAsset: 'images/logoter.png',
@@ -440,7 +389,7 @@ class _AccueilState extends State<Accueil> {
         padding: EdgeInsets.all(5),
         width: 180,
         height: 60,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
           //borderRadius: BorderRadius.circular(90)
 
@@ -452,6 +401,7 @@ class _AccueilState extends State<Accueil> {
             print('Floating action button pressed!');
             ajoutVoyageModal();
           },
+          backgroundColor: AppColors.marron,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -469,7 +419,6 @@ class _AccueilState extends State<Accueil> {
               /*  */
             ],
           ),
-          backgroundColor: AppColors.marron,
         ),
       ),
       body: Stack(
@@ -506,7 +455,8 @@ class _AccueilState extends State<Accueil> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TitleOption(
-                              data: 'Bonjour }',
+                              data:
+                                  "Bonjour ${Provider.of<AuthProvider>(context, listen: false).fullname}",
                               color: Colors.white,
                               size: 18,
                               weight: FontWeight.w600),
@@ -721,6 +671,42 @@ class _AccueilState extends State<Accueil> {
                           return Center(
                             child: Text('Error: ${snapshot.error}'),
                           );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          /// Display a message indicating that no trips have been made yet
+                          return Center(
+                            child: Container(
+                              padding: EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                //color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'images/imgpasdevoyage.png', // Replace with your image asset path
+                                    width: 270.0, // Adjust image size as needed
+                                    height: 129.0,
+                                  ),
+                                  SizedBox(height: 16.0),
+                                  Container(
+                                    width: 200,
+                                    child: TitleOption(
+                                      data:
+                                          "Vous n’avez pas de voyage pour le moment",
+                                      color: Color.fromRGBO(102, 112, 133, 1),
+                                      size: 15,
+                                      weight: FontWeight.w600,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                          // Display a message indicating that no trips have been made yet
                         } else {
                           List<VoyageData> voyageInfoList = snapshot.data!;
                           return ListView.builder(
@@ -754,9 +740,11 @@ class _AccueilState extends State<Accueil> {
                                             CircleAvatar(
                                               backgroundColor: AppColors.rouge,
                                               child: Image.asset(
-                                                  'images/train.png'),
+                                                'images/trainblanc.png',
+                                                width: 20,
+                                              ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 3,
                                             ),
                                             Spacer(),

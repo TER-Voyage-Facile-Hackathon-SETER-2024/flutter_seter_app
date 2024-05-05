@@ -83,6 +83,7 @@ class AuthServices {
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
         AuthRegisterResponse authRegisterResponse =
             AuthRegisterResponse.fromJson(jsonResponse);
+        print("le resultat est ${authRegisterResponse.data}");
         return authRegisterResponse;
       } else {
         // Handle the case when the status code is not 201
@@ -95,7 +96,7 @@ class AuthServices {
 
   static Future<List<VoyageData>?> getUserByIdVoyageService(
       BuildContext context, int userId) async {
-   // final app = Provider.of<AuthProvider>(context, listen: false);
+    // final app = Provider.of<AuthProvider>(context, listen: false);
     /* int userId = app.userId;
 
     if (userId == null) {
@@ -112,6 +113,7 @@ class AuthServices {
           final List voyageData = responseData['data'] as List;
           final List<VoyageData> voyages =
               voyageData.map((v) => VoyageData.fromJson(v)).toList();
+          print("voyages $voyages");
           return voyages;
         } else {
           throw Exception('No data available');
@@ -120,7 +122,7 @@ class AuthServices {
         throw Exception(
             'Failed to load user voyage by id data: ${response.statusCode}');
       }
-     /*  if (response.statusCode == 201) {
+      /*  if (response.statusCode == 201) {
         print(
         'response get list voyage by iduser code   ${response.body.toString()}');
           final responseData = jsonDecode(response.body);

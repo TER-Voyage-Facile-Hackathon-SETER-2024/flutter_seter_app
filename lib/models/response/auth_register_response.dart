@@ -54,7 +54,7 @@ class Data {
   // Factory method to create an instance from JSON data
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      id: json['fullname'],
+      id: json['id'],
       fullname: json['fullname'],
       otp: json['otp'],
       adress: json['adress'],

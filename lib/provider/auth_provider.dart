@@ -13,7 +13,7 @@ import 'package:terappmobile/provider/update_user_infos_provider.dart';
 import 'package:terappmobile/screens/auth/cgu.dart';
 import 'package:terappmobile/screens/auth/otp.dart';
 import 'package:terappmobile/screens/home/accueil.dart';
-import 'package:terappmobile/screens/home/profile.dart';
+import 'package:terappmobile/screens/home/home.dart';
 import 'package:terappmobile/services/auth_service.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -140,7 +140,7 @@ class AuthProvider extends ChangeNotifier {
       _authMobileResponse = response;
       _userId = response!.data!.id;
 
-      if (response?.status == 1) {
+      if (response.status == 1) {
         print('user n exist pas');
         _otp = response!.data!.otp!;
         Navigator.push(
@@ -172,7 +172,7 @@ class AuthProvider extends ChangeNotifier {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Profile()),
+          MaterialPageRoute(builder: (context) => const Home()),
         );
         notifyListeners();
       }
@@ -221,12 +221,13 @@ class AuthProvider extends ChangeNotifier {
         _authRegisterResponse = response;
         _fullname = response.data!.fullname!;
         _userId = response!.data!.id;
+        print(_userId);
         //saveUserToSP(response);
         //var username = await getUserFromSP().then((value) => null);
         print(response.status);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Accueil()),
+          MaterialPageRoute(builder: (context) => const Home()),
         );
         return response;
       } else {
@@ -243,12 +244,11 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future getUserByIdVoyageProvider(
-      BuildContext context, int user) async {
+  Future getUserByIdVoyageProvider(BuildContext context, int user) async {
     try {
-      final response = await AuthServices.getUserByIdVoyageService(context ,user);
-      if (response != null ) {
-
+      final response =
+          await AuthServices.getUserByIdVoyageService(context, user);
+      if (response != null) {
         return response;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

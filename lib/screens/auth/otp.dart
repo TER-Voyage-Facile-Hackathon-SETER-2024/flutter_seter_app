@@ -249,6 +249,13 @@ class _OtpState extends State<Otp> {
                       )
                     ],
                   ),
+                  SizedBox(height: 20,) ,
+                  Center(
+                    child: Container(
+                      color: AppColors.beige ,
+                      child: Text(' le code otp ${Provider.of<AuthProvider>(context, listen: false).otp} '),
+                    ),
+                  )
                 ],
               ),
             ),
