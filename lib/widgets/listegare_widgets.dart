@@ -20,7 +20,7 @@ class ListeGareWidget extends StatelessWidget {
       child: Container(
         width: double.infinity - 20,
         height: 54,
-       
+        padding: EdgeInsets.symmetric(vertical: 5 ,horizontal: 10),
         child: Row(
           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           //crossAxisAlignment: CrossAxisAlignment.start,

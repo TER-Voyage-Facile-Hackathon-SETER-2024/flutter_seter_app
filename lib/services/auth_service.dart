@@ -102,15 +102,29 @@ class AuthServices {
       throw Exception('User ID is not available');
     } */
 
-    final url = Uri.parse('http://localhost:8000/api/v1/voyage/$userId');
+    final url = Uri.parse('http://10.0.2.2:8000/api/v1/voyage/$userId');
 
     try {
       final response = await http.get(url);
       if (response.statusCode == 201) {
+        final responseData = jsonDecode(response.body);
+        if (responseData['data'] != null) {
+          final List voyageData = responseData['data'] as List;
+          final List<VoyageData> voyages =
+              voyageData.map((v) => VoyageData.fromJson(v)).toList();
+          return voyages;
+        } else {
+          throw Exception('No data available');
+        }
+      } else {
+        throw Exception(
+            'Failed to load user voyage by id data: ${response.statusCode}');
+      }
+     /*  if (response.statusCode == 201) {
         print(
         'response get list voyage by iduser code   ${response.body.toString()}');
           final responseData = jsonDecode(response.body);
-        final List<dynamic> voyageData = responseData as List<dynamic>;
+        final List voyageData = responseData as List;
         final List<VoyageData> voyages = voyageData
             .map((v) => VoyageData.fromJson(v))
             .toList();
@@ -118,7 +132,7 @@ class AuthServices {
         
       } else {
         throw Exception('Failed to load user voyage by id data');
-      }
+      } */
     } catch (e) {
       throw Exception('Failed to fetch user  voyage by id data: $e');
     }

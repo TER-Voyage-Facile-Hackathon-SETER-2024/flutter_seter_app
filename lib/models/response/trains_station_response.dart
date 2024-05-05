@@ -1,12 +1,14 @@
 class TrainStationsResponse {
-  int id;
-  String nom;
-  String heureOuverture;
-  String heureFermeture;
-  bool placeParking;
-  bool parvis;
-  bool agence;
-  List<Commerces> commerces;
+  
+  int? id;
+  String? nom;
+  String? heureOuverture;
+  String? heureFermeture;
+  bool? placeParking;
+  bool? parvis;
+  bool? agence;
+  List<Commerces>? commerces;
+  bool? isSelected;
 
   TrainStationsResponse(
       {required this.id,
@@ -16,6 +18,7 @@ class TrainStationsResponse {
       required this.placeParking,
       required this.parvis,
       required this.agence,
+      this.isSelected = false ,
       required this.commerces});
 
   factory TrainStationsResponse.fromJson(Map<String, dynamic> json) {
@@ -34,7 +37,6 @@ class TrainStationsResponse {
     );
   }
 
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
@@ -45,7 +47,7 @@ class TrainStationsResponse {
     data['parvis'] = this.parvis;
     data['agence'] = this.agence;
     if (this.commerces != null) {
-      data['commerces'] = this.commerces.map((v) => v.toJson()).toList();
+      data['commerces'] = this.commerces!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -58,11 +60,10 @@ class Commerces {
   Commerces({required this.nom, required this.description});
 
   factory Commerces.fromJson(Map<String, dynamic> json) {
-   return Commerces(
-     nom:json['nom'] ,
-    description:json['description'] ,
-   );
-   
+    return Commerces(
+      nom: json['nom'],
+      description: json['description'],
+    );
   }
 
   Map<String, dynamic> toJson() {

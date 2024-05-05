@@ -48,6 +48,7 @@ dependencies:
   shared_preferences: ^2.2.3
   line_icons: ^2.0.3
   font_awesome_flutter: ^10.7.0
+  qr_code_scanner: ^1.0.1
 
 
   
@@ -113,7 +114,6 @@ flutter:
     - images/classe.png
     - images/plus.png
     - images/app/
-    - images/sensvoyage.png
     - images/location4.png
     - images/detailvoyage.png
     - images/trainrouge.png
@@ -135,17 +135,23 @@ flutter:
     - images/timegreen.png
     - images/timered.png
     - images/check.png
+    - images/check2.png
     - images/timered2.png
     - images/parking.png
     - images/parvis.png
     - images/agence.png
-  
-
-    
+    - images/locationpicked.png
+    - images/locationnotpicked.png
+    - images/rightdirection.png
+    - images/leftdirection.png
+    - images/agence.png
     - images/detailgare.png
-
-
+    - images/picked.png
+    - images/vg.png
+    - images/vd.png
+    - images/arrowgare.png
     - audios/audio.mp3
+    - images/scan.png
    # - .png
 
 

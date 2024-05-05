@@ -10,6 +10,7 @@ import 'package:terappmobile/models/response/voyage_user.dart';
 import 'package:terappmobile/models/voyage_info.dart';
 import 'package:terappmobile/provider/auth_provider.dart';
 import 'package:terappmobile/provider/seter_provider.dart';
+import 'package:terappmobile/provider/train_provider.dart';
 import 'package:terappmobile/screens/ajout_voyage/ajout_voyage.dart';
 import 'package:terappmobile/screens/train/suivi_voyage.dart';
 import 'package:terappmobile/screens/train/train_voyage.dart';
@@ -43,22 +44,35 @@ class _AccueilState extends State<Accueil> {
     return result;
   }
 
-  // String fullname = '';
-  /* List<CardInfo> cardinfo = [
-    CardInfo(imageAsset: 'images/logoter.png', title: 'À savoir !', description: 'Aliquam eget purus sit malesuada tempor euismod. Aliquam eget purus sit malesuada tempor euismod.', audioFile: audioFile)
-  ]; */
+  String removeGareDe(String stationName) {
+    const prefix = 'Gare de ';
+    if (stationName.startsWith(prefix)) {
+      return stationName.substring(prefix.length).trim();
+    } else {
+      return stationName;
+    }
+  }
+
+  List<Commerces>? commerces = [
+    {
+      "nom": "Relay",
+      "description":
+          "Relay, la plus grande marque internationale en Travel Essentials est présente à la gare de Dakar. Présents dans des centaines d’aéroports et de gares dans le monde, les magasins Relay sont un passage essentiel pour les voyageurs. Quel que soit le profil, Relay leur offre une sélection adaptée de produits essentiels au voyage qui facilitent et enrichissent leurs déplacements. Ouvert du lundi au dimanche de 8h00 à 20h00"
+    },
+    {
+      "nom": "KEPAR KITCHEN",
+      "description":
+          "Un concept de restauration exclusif de rôtisserie de poulet (poulet grillé et poulet rôti) proposant des préparations à base d’ingrédients locaux. La spécificité de ce concept de restauration repose sur la production du poulet à la vue du consommateur. Ce nouveau concept à la gare de Dakar vous fera vivre des moments agréables et inoubliables.Votre restaurant le « Képar Kitchen » à la Gare de Dakar (TER) est ouvert de 07h00 à 21H00 du lundi au dimanche."
+    },
+    {
+      "nom": "AELIA",
+      "description":
+          "AELIA Dakar propose une large gamme de parfums, cosmétiques maquillages, à prix attractifs ! Retrouvez les grandes marques de parfums dans la boutique AELIA à la gare de Dakar et venez vivre une expérience inoubliable. Ouvert de 8h00 à 20h00 du lundi au dimanche"
+    }
+  ].map((item) => Commerces.fromJson(item)).toList();
 
   List<CardInfo> cardInfoList = [];
   List<VoyageInfoResponse> voyageInfoList = [];
-  /* List<String> gares = [
-    'Gare de Dakar',
-    'Gare de Thiaroye',
-    'Gare de Pikine',
-    'Gare de Baux maraichers',
-    'Gare de Dalifort',
-    'Gare de Hann',
-    'Gare de Colobane'
-  ]; */
 
   void gareModal() {
     showModalBottomSheet(
@@ -68,7 +82,7 @@ class _AccueilState extends State<Accueil> {
         builder: (context) => Container(
               padding: EdgeInsets.all(10),
               height: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).size.height / 4,
+                  MediaQuery.of(context).size.height / 3,
               width: double.infinity,
               //color: Colors.white,
               decoration: BoxDecoration(
@@ -122,13 +136,17 @@ class _AccueilState extends State<Accueil> {
                       } else {
                         List<TrainStationsResponse>? garesList = snapshot.data;
                         return ListView.builder(
-                          itemCount: garesList!.length,
+                          itemCount: 5,
                           itemBuilder: (context, index) {
-                            final gare = garesList[index];
+                            final gare = garesList![index];
                             return InkWell(
                                 onTap: () async {
-                                  /* Your onTap logic here */
-                                  print('gare');
+                                  print(
+                                      '--------  GARE PICKED ${snapshot.data![index].nom} --------');
+                                  Provider.of<GareProvider>(context,
+                                          listen: false)
+                                      .setSelectedStation(
+                                          snapshot.data![index]);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -144,6 +162,49 @@ class _AccueilState extends State<Accueil> {
                     },
                   ),
                 ),
+                SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () {
+                    var userid = Provider.of<AuthProvider>(context , listen: false).userId!;
+                    TrainStationsResponse trainStationsResponse =
+                        TrainStationsResponse(
+                            id: userid,
+                            nom: removeGareDe('Gare de Dakar'),
+                            heureOuverture: '05:00',
+                            heureFermeture: '23:00',
+                            placeParking: true,
+                            parvis: true,
+                            agence: true,
+                            commerces: commerces);
+                    Provider.of<GareProvider>(context, listen: false)
+                        .setSelectedStation(trainStationsResponse);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TrainVoyage()),
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: AppColors.marron,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TitleOption(
+                            data: 'Voir plus de gares',
+                            color: Colors.white,
+                            size: 16,
+                            weight: FontWeight.w400),
+                        SizedBox(width: 5),
+                        Image.asset('images/arrowgare.png'),
+                      ],
+                    ),
+                  ),
+                )
               ]),
             ));
   }
@@ -243,58 +304,7 @@ class _AccueilState extends State<Accueil> {
 
                 /*  */
               ]),
-            )
-
-        /* Stack(
-        //clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height -
-                MediaQuery.of(context).size.height / 4,
-            width: double.infinity,
-            //color: Colors.white,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-              color: Colors.white,
-            ),
-            child: Column(children: [
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      color: Colors.grey,
-                      width: 100,
-                      height: 3,
-                    ),
-                  ),
-                  Container(height: 500, color: Colors.red,)
-                  /* ListView.builder(
-                  itemCount: gares.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () async {
-                        /* Your onTap logic here */
-                      },
-                      child: ListeGare(),
-                    );
-                  },
-                ) */
-                  
-                ],
-              )
-            ]),
-          )
-        ],
-      ),
-    */
-        );
+            ));
   }
 
   /* Future<void> getUserFromSP() async {
@@ -334,11 +344,11 @@ class _AccueilState extends State<Accueil> {
     voyageFuture = voyagesByUser();
     // fullname = Provider.of<AuthProvider>(context, listen: false).fullname;
     //print('----- user full name = ${fullname}');
+    // File file = new File(audioFileUri.getPath());
 
-    // Assuming the audio file is located at 'path/to/audio/file.mp3'
-    File audioFile2 = File('audio/audio.mp3');
-    File audioFile1 = File('audio/audio.mp3');
-    File audioFile3 = File('audio/audio.mp3');
+    File audioFile2 = File('audios/audio.mp3');
+    File audioFile1 = File('audios/audio.mp3');
+    File audioFile3 = File('audios/audio.mp3');
 
     /* List<VoyageInfoResponse> voyageInfoList = [
       VoyageInfoResponse(
@@ -595,7 +605,7 @@ class _AccueilState extends State<Accueil> {
                           return Padding(
                             padding: EdgeInsets.all(10),
                             child: Container(
-                              width: 300,
+                              width: 350,
                               height: 200,
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -657,15 +667,14 @@ class _AccueilState extends State<Accueil> {
                                            width: 280, */
                                     Flexible(
                                       child: VoiceMessageView(
-                                        backgroundColor: Colors.yellow,
+                                        backgroundColor: Colors.white,
                                         circlesColor: AppColors.marron,
                                         activeSliderColor: AppColors.marron,
                                         notActiveSliderColor:
                                             Colors.transparent,
                                         size: 39,
                                         controller: VoiceController(
-                                          audioSrc:
-                                              cardInfo.audioFile.toString(),
+                                          audioSrc: cardInfo.audioFile!.path,
                                           maxDuration:
                                               const Duration(seconds: 10),
                                           isFile: false,
@@ -702,162 +711,180 @@ class _AccueilState extends State<Accueil> {
                       size: 20,
                       weight: FontWeight.w600),
                   Expanded(
-                    child:FutureBuilder<List<VoyageData>>(
-  future: voyagesByUser(), // Replace Future.value with your actual future
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else if (snapshot.hasError) {
-      return Center(
-        child: Text('Error: ${snapshot.error}'),
-      );
-    } else {
-      List<VoyageData> voyageInfoList = snapshot.data!;
-      return ListView.builder(
-        reverse: true,
-        //padding: EdgeInsets.all(10),
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemCount: voyageInfoList.length,
-        itemBuilder: (context, index) {
-          VoyageData voyageInfo = voyageInfoList[index];
-          return Padding(
-            padding: EdgeInsets.all(10),
-            child: Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Color.fromRGBO(208, 213, 221, 1)),
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: AppColors.rouge,
-                          child: Image.asset('images/train.png'),
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        Spacer(),
-                  
-                      ],
+                    child: FutureBuilder<List<VoyageData>>(
+                      future:
+                          voyageFuture, // Replace Future.value with your actual future
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        } else {
+                          List<VoyageData> voyageInfoList = snapshot.data!;
+                          return ListView.builder(
+                            reverse: true,
+                            //padding: EdgeInsets.all(10),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: voyageInfoList.length,
+                            itemBuilder: (context, index) {
+                              VoyageData voyageInfo = voyageInfoList[index];
+                              return Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color:
+                                            Color.fromRGBO(208, 213, 221, 1)),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundColor: AppColors.rouge,
+                                              child: Image.asset(
+                                                  'images/train.png'),
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          height: 58,
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                'images/trajet.png',
+                                                height: 49,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  TitleOption(
+                                                    data:
+                                                        "${snapshot.data![index].depart}", // voyageInfoList[index].depart,
+                                                    color: Color.fromRGBO(
+                                                        152, 162, 179, 1),
+                                                    size: 15,
+                                                    weight: FontWeight.w600,
+                                                  ),
+                                                  Spacer(),
+                                                  TitleOption(
+                                                    data:
+                                                        "${snapshot.data![index].destination}", //'/* ${voyageInfoList[index].arrive.toString()} */',
+                                                    color: Color.fromRGBO(
+                                                        152, 162, 179, 1),
+                                                    size: 15,
+                                                    weight: FontWeight.w600,
+                                                  ),
+                                                ],
+                                              ),
+                                              Spacer(),
+                                              Column(
+                                                children: [
+                                                  TitleOption(
+                                                    data:
+                                                        '${snapshot.data![index].prix} CFA',
+                                                    color: Colors.black,
+                                                    size: 16,
+                                                    weight: FontWeight.w600,
+                                                  ),
+                                                  Spacer(),
+                                                  TitleOption(
+                                                    data:
+                                                        '${snapshot.data![index].date}',
+                                                    color: Color.fromRGBO(
+                                                        152, 162, 179, 1),
+                                                    size: 15,
+                                                    weight: FontWeight.w600,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            //color: Colors.yellow,
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: Color.fromRGBO(
+                                                    208, 213, 221, 1),
+                                                width: 2.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundColor: Color.fromRGBO(
+                                                  208, 213, 221, 1),
+                                              minRadius: 15,
+                                              child: Image.asset(
+                                                  'images/star.png'),
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            TitleOption(
+                                              data:
+                                                  '${snapshot.data![index].classe}',
+                                              color: Color.fromRGBO(
+                                                  152, 162, 179, 1),
+                                              size: 18,
+                                              weight: FontWeight.w600,
+                                            ),
+                                            Spacer(),
+                                            Image.asset('images/classe.png'),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            TitleOption(
+                                              data:
+                                                  '${snapshot.data![index].zone}',
+                                              color: Color.fromRGBO(
+                                                  152, 162, 179, 1),
+                                              size: 18,
+                                              weight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 58,
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'images/trajet.png',
-                            height: 49,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TitleOption(
-                                data: "${snapshot.data![index].depart}", // voyageInfoList[index].depart,
-                                color: Color.fromRGBO(152, 162, 179, 1),
-                                size: 15,
-                                weight: FontWeight.w600,
-                              ),
-                              Spacer(),
-                              TitleOption(
-                                data: "${snapshot.data![index].destination}", //'/* ${voyageInfoList[index].arrive.toString()} */',
-                                color: Color.fromRGBO(152, 162, 179, 1),
-                                size: 15,
-                                weight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          Column(
-                            children: [
-                              TitleOption(
-                                data: '${snapshot.data![index].prix}" CFA',
-                                color: Colors.black,
-                                size: 16,
-                                weight: FontWeight.w600,
-                              ),
-                              Spacer(),
-                              TitleOption(
-                                data: '10 fev',
-                                color: Color.fromRGBO(152, 162, 179, 1),
-                                size: 15,
-                                weight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 10,
-                      decoration: BoxDecoration(
-                        //color: Colors.yellow,
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Color.fromRGBO(208, 213, 221, 1),
-                            width: 2.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Color.fromRGBO(208, 213, 221, 1),
-                          minRadius: 15,
-                          child: Image.asset('images/star.png'),
-                        ),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        TitleOption(
-                          data: '2nde classe',
-                          color: Color.fromRGBO(152, 162, 179, 1),
-                          size: 18,
-                          weight: FontWeight.w600,
-                        ),
-                        Spacer(),
-                        Image.asset('images/classe.png'),
-                        SizedBox(
-                          width: 3,
-                        ),
-                        TitleOption(
-                          data: '1 zone',
-                          color: Color.fromRGBO(152, 162, 179, 1),
-                          size: 18,
-                          weight: FontWeight.w600,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      );
-    }
-  },
-),
 
-                    
-                    
                     /*  ListView.builder(
                       reverse: true,
                       //padding: EdgeInsets.all(10),
@@ -1041,7 +1068,8 @@ class _AccueilState extends State<Accueil> {
                         );
                       },
                     ),
-                   */),
+                   */
+                  ),
                 ],
               ),
             ),
