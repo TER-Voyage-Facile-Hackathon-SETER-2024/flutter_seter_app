@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:terappmobile/configs/config.dart';
 
 class GetUserProvider extends ChangeNotifier {
-   int id=1;
+  late int id;
 
   Map<String, dynamic> getUserResponse = {};
 

@@ -30,6 +30,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<GetUserProvider>(context, listen: false).fetchUser();
+
     final config = Config(
       botDelay: 3,
       waitText: "entrain d'ecrire ...",
@@ -142,7 +144,8 @@ class _ProfileState extends State<Profile> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TitleOption(
-                                  data: '${getUser['data']!['fullname']}',
+                                  data:
+                                      '${Provider.of<GetUserProvider>(context, listen: false).getUserResponse['fullname']}',
                                   color: AppColors.marron,
                                   size: 18,
                                   weight: FontWeight.w700,
@@ -152,7 +155,8 @@ class _ProfileState extends State<Profile> {
                                   height: 4,
                                 ),
                                 TitleOption(
-                                  data: '${getUser['data']!['phone']}',
+                                  data:
+                                      '${Provider.of<GetUserProvider>(context, listen: false).getUserResponse['phone']}',
                                   color: Color.fromRGBO(152, 162, 179, 1),
                                   size: 16,
                                   weight: FontWeight.w500,
@@ -296,7 +300,8 @@ class _ProfileState extends State<Profile> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 TitleOption(
-                                  data: '${getUser['data']!['fullname']}',
+                                  data:
+                                      '${Provider.of<GetUserProvider>(context, listen: false).getUserResponse['fullname']}',
                                   color: Colors.white,
                                   size: 22,
                                   weight: FontWeight.w700,
