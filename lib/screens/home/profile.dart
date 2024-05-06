@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:terappmobile/provider/get_user_provider.dart';
 import 'package:terappmobile/screens/home/carte_abonnement.dart';
 import 'package:terappmobile/screens/home/home.dart';
@@ -18,8 +19,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   void initState() {
-    super.initState();
     Provider.of<GetUserProvider>(context, listen: false).fetchUser();
+    super.initState();
   }
 
   @override
@@ -28,10 +29,18 @@ class _ProfileState extends State<Profile> {
     super.dispose();
   }
 
+  void getuser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int id = prefs.getInt("user_id") as int;
+    print("l'id du user connecté $id");
+  }
+
   @override
   Widget build(BuildContext context) {
-    Provider.of<GetUserProvider>(context, listen: false).fetchUser();
-
+    var getUser =
+        Provider.of<GetUserProvider>(context, listen: false).getUserResponse;
+    print("l'utilisateur est ${getUser['data']?['fullname']}");
+    print("l'utilisateur est ${getUser['data']?['adress']!}");
     final config = Config(
       botDelay: 3,
       waitText: "entrain d'ecrire ...",
@@ -66,8 +75,6 @@ class _ProfileState extends State<Profile> {
     );
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
-    var getUser =
-        Provider.of<GetUserProvider>(context, listen: false).getUserResponse;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -144,8 +151,7 @@ class _ProfileState extends State<Profile> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TitleOption(
-                                  data:
-                                      '${Provider.of<GetUserProvider>(context, listen: false).getUserResponse['fullname']}',
+                                  data: '${getUser['data']?['fullname']}',
                                   color: AppColors.marron,
                                   size: 18,
                                   weight: FontWeight.w700,
@@ -155,8 +161,7 @@ class _ProfileState extends State<Profile> {
                                   height: 4,
                                 ),
                                 TitleOption(
-                                  data:
-                                      '${Provider.of<GetUserProvider>(context, listen: false).getUserResponse['phone']}',
+                                  data: '${getUser['data']?['phone']}',
                                   color: Color.fromRGBO(152, 162, 179, 1),
                                   size: 16,
                                   weight: FontWeight.w500,
@@ -300,8 +305,7 @@ class _ProfileState extends State<Profile> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 TitleOption(
-                                  data:
-                                      '${Provider.of<GetUserProvider>(context, listen: false).getUserResponse['fullname']}',
+                                  data: '${getUser['data']?['fullname']}',
                                   color: Colors.white,
                                   size: 22,
                                   weight: FontWeight.w700,

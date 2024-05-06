@@ -1,9 +1,5 @@
-import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:terappmobile/screens/auth/onboarding.dart';
 import 'package:terappmobile/screens/auth/sign_up.dart';
 import 'package:terappmobile/utils/app_colors.dart';
 import 'package:terappmobile/utils/title_option.dart';
@@ -96,14 +92,17 @@ class _SplashScreenState extends State<Welcome> {
                                 elevation: 0,
                                 tapTargetSize: MaterialTapTargetSize
                                     .shrinkWrap, // Remove click animation
-                               // onPrimary: Color.fromRGBO(245, 245, 245, 1),
-                                backgroundColor: Color.fromRGBO(245, 245, 245, 1),
+                                // onPrimary: Color.fromRGBO(245, 245, 245, 1),
+                                backgroundColor:
+                                    Color.fromRGBO(245, 245, 245, 1),
                                 minimumSize: Size(width / 2 - 30, 50),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(6.0),
                                 ),
                               ),
                               onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: ((context) => SignUp())));
                                 // Add your onPressed logic here
                               },
                               child: TitleText(
@@ -117,7 +116,7 @@ class _SplashScreenState extends State<Welcome> {
                               ),
                             ),
                           ),
-                          SizedBox(width :10),
+                          SizedBox(width: 10),
                           Flexible(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
